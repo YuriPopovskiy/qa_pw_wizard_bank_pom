@@ -1,5 +1,10 @@
-import { test } from '@playwright/test';
+import { expect, test } from '@playwright/test';
 import { faker } from '@faker-js/faker';
+
+    const firstName = faker.person.firstName();
+    const lastName = faker.person.lastName();
+    const postCode = faker.location.zipCode(); 
+    
 
 test.beforeEach( async ({ page }) => {
   /* 
@@ -10,6 +15,13 @@ test.beforeEach( async ({ page }) => {
   4. Fill the Postal Code.
   5. Click [Add Customer].
   */
+
+    await page.goto('https://www.globalsqa.com/angularJs-protractor/BankingProject/#/manager/addCust');
+    await page.getByPlaceholder('First Name').fill(firstName);
+    await page.getByPlaceholder('Last Name').fill(lastName);
+    await page.getByPlaceholder('Post Code').fill(postCode);
+    await page.getByRole('form').getByRole('button', { name: 'Add Customer' }).click();
+    await page.reload();
 
 });
 
@@ -22,6 +34,14 @@ Test:
 4. Reload the page.
 5. Assert customer row is not present in the table. 
 */
-
+  await page.getByRole('button', { name: 'Customers' }).click();
+  
+  const customerRow = page.getByRole('row', { name: `${firstName} ${lastName} ${postCode}` });
+  const deleteBtn = customerRow.getByRole('button');
+  await deleteBtn.click();
+  
+  await expect(customerRow).not.toBeVisible();
+  await page.reload();
+  await expect(customerRow).not.toBeVisible();
 
 });

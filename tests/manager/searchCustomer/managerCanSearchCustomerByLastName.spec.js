@@ -1,4 +1,4 @@
-import { test } from '@playwright/test';
+import { test, expect } from '@playwright/test';
 import { faker } from '@faker-js/faker';
 
 let firstName;
@@ -19,7 +19,12 @@ test.beforeEach( async ({ page }) => {
   lastName = faker.person.lastName();
   postalCode = faker.location.zipCode(); 
 
-
+    await page.goto('https://www.globalsqa.com/angularJs-protractor/BankingProject/#/manager/addCust');
+    await page.getByPlaceholder('First Name').fill(firstName);
+    await page.getByPlaceholder('Last Name').fill(lastName);
+    await page.getByPlaceholder('Post Code').fill(postalCode);
+    await page.getByRole('form').getByRole('button', { name: 'Add Customer' }).click();
+    await page.reload();
 });
 
 test('Assert manager can search customer by Last Name', async ({ page }) => {
@@ -30,6 +35,14 @@ Test:
 3. Assert customer row is present in the table. 
 4. Assert no other rows is present in the table.
 */
+  await page.getByRole('button', { name: 'Customers' }).click();
+  await page.waitForTimeout(1000);
+  await page.getByPlaceholder('Search Customer').fill(`${lastName}`);
+  await page.waitForTimeout(1000);
 
+  await expect(page.getByRole('cell', { name: `${lastName}` })).not.toBeEmpty();
+
+  // const noOtherRow = page.locator('.marTop > div');
+  // await expect(noOtherRow).toHaveCount(1);
 
 });

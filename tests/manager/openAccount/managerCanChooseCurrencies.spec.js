@@ -1,10 +1,12 @@
-import { expect, test } from '@playwright/test';
+import { test } from '@playwright/test';
 import { faker } from '@faker-js/faker';
+
+import { AddCustomerPage } from '../../../src/pages/manager/OpenAccountPage';
 
 test('Assert manager can choose currencies for account', async ({ page }) => {
 /* 
 Test:
-1. Open the Open account page   
+1. Open the Open account page https://www.globalsqa.com/angularJs-protractor/BankingProject/#/manager/openAccount
 2. Select currency Dollar
 3. Assert the drop-dwon has value Dollar
 4. Select currency Pound
@@ -12,19 +14,19 @@ Test:
 6. Select currency Rupee
 7. Assert the drop-dwon has value Rupee
 */
-    await page.goto('https://www.globalsqa.com/angularJs-protractor/BankingProject/#/manager/openAccount');
-    await page.waitForTimeout(1000);
+const addSome = new AddCustomerPage(page);
 
-    const currencyDollar = page.locator('#currency');
-    await currencyDollar.selectOption('Dollar');
-    await expect(currencyDollar).toHaveValue('Dollar');
+await addSome.open();
 
-    const currencyPound = page.locator('#currency');
-    await currencyPound.selectOption('Pound');
-    await expect(currencyPound).toHaveValue('Pound');
+await addSome.selectCurrency('Dollar');
 
-    const currencyRupee = page.locator('#currency');
-    await currencyRupee.selectOption('Rupee');
-    await expect(currencyRupee).toHaveValue('Rupee');
+await addSome.assertSelectCurrencyDropdownContainsValue('Dollar');
 
+await addSome.selectCurrency('Pound');
+
+await addSome.assertSelectCurrencyDropdownContainsValue('Pound');
+
+await addSome.selectCurrency('Rupee');
+
+await addSome.assertSelectCurrencyDropdownContainsValue('Rupee');
 });

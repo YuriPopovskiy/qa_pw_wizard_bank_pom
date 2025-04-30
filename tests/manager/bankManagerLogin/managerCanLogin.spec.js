@@ -1,4 +1,5 @@
-import { expect, test } from '@playwright/test';
+import { test } from '@playwright/test';
+import { BankHomePage } from '../../../src/pages/BankHomePage';
 
 test('Assert manager can Login ', async ({ page }) => {
 /* 
@@ -9,21 +10,19 @@ Test:
 4. Assert button [Open Account] is visible
 5. Assert button [Customers] is visible
 */
-    await page.goto('https://www.globalsqa.com/angularJs-protractor/BankingProject/#/login');
-    await page.waitForTimeout(1000);
-    await page.getByRole('button', { name: 'Bank Manager Login' }).click();
-    await page.waitForTimeout(1000);
-    
-    const addCustomerbtn = page.getByRole('button', { name: 'Add Customer' });
-    await expect(addCustomerbtn).toBeVisible();
+const home = new BankHomePage(page);
 
-    const openAccountbtn = page.getByRole('button', { name: 'Open Account' });
-    await expect(openAccountbtn).toBeVisible();
+await home.open();
 
-    const customersbtn = page.getByRole('button', { name: 'Customers' });
-    await expect(customersbtn).toBeVisible();
+await home.expectBtnCustomerLoginVisible();
 
+//await home.clickCustomerLoginButton();
 
+await home.clickBankManagerLoginButton();
+
+await home.expectAddCustomerBtnVisible();
+await home.expectCustomersBtnVisible();
+await home.expectOpenAccountBtnVisible();
 
 
 });

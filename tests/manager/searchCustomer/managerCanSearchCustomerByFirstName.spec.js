@@ -1,5 +1,6 @@
-import { expect, test } from '@playwright/test';
+import { test } from '@playwright/test';
 import { faker } from '@faker-js/faker';
+import { AddCustomerPage } from '../../../src/pages/manager/AddCustomerPage';
 
 let firstName;
 let lastName;
@@ -14,17 +15,20 @@ test.beforeEach( async ({ page }) => {
   4. Fill the Postal Code.
   5. Click [Add Customer].
   */
-
+  const addCustomer = new AddCustomerPage(page);
   firstName = faker.person.firstName();
   lastName = faker.person.lastName();
   postalCode = faker.location.zipCode(); 
+  await addCustomer.open();
 
-    await page.goto('https://www.globalsqa.com/angularJs-protractor/BankingProject/#/manager/addCust');
-    await page.getByPlaceholder('First Name').fill(firstName);
-    await page.getByPlaceholder('Last Name').fill(lastName);
-    await page.getByPlaceholder('Post Code').fill(postalCode);
-    await page.getByRole('form').getByRole('button', { name: 'Add Customer' }).click();
-    await page.reload();
+await addCustomer.fillField(addCustomer.firstNameField, firstName);
+await addCustomer.fillField(addCustomer.lastNameField, lastName);
+await addCustomer.fillField(addCustomer.postalCodeField, postalCode);
+
+await addCustomer.clickBtn(addCustomer.btnAddCustomer);
+
+await addCustomer.reloadPage();
+
 
 });
 
@@ -36,16 +40,13 @@ Test:
 3. Assert customer row is present in the table. 
 4. Assert no other rows is present in the table.
 */
-  await page.getByRole('button', { name: 'Customers' }).click();
-  await page.waitForTimeout(1000);
-  await page.getByPlaceholder('Search Customer').fill(`${firstName}`);
-  await page.waitForTimeout(1000);
+const addCustomer = new AddCustomerPage(page, firstName, lastName, postalCode);
+await addCustomer.openCustomersListTab();
 
-  await expect(page.getByRole('cell', { name: `${firstName}` })).not.toBeEmpty();
+await addCustomer.fillField(addCustomer.fieldSearch, firstName);
 
-  const noOtherRow = page.locator('.marTop > div');
-  await expect(noOtherRow).toHaveCount(1);
+await addCustomer.expectText(addCustomer.myLocator, `${firstName} ${lastName}`);
 
-
-
+await addCustomer.expectTextNotVisible(addCustomer.myLocator, "Hello There");
+await addCustomer.assertNoMoreFields(addCustomer.myLocatorHidden);
 });

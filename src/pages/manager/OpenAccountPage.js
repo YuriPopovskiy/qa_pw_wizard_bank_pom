@@ -1,6 +1,6 @@
 const { expect } = require('@playwright/test');
 
-export class AddCustomerPage {
+export class OpenAccountPage {
   constructor(page, firstName, lastName, postCode) {
     this.page = page; 
     this.currencyDropDown = page.locator('#currency');

@@ -1,7 +1,7 @@
 import { test } from '@playwright/test';
 import { faker } from '@faker-js/faker';
 import { AddCustomerPage } from '../../../src/pages/manager/AddCustomerPage';
-import { AddCustomerPage as AddSome } from '../../../src/pages/manager/OpenAccountPage';
+import { OpenAccountPage } from '../../../src/pages/manager/OpenAccountPage';
 
 
 const firstName = faker.person.firstName();
@@ -45,7 +45,7 @@ Test:
 Tips:
  1. Do not rely on the customer row id for the step 13. Use the ".last()" locator to get the last row.
 */
-const addSome = new AddSome(page, firstName, lastName, postCode);
+const addSome = new OpenAccountPage(page, firstName, lastName, postCode);
 
 await addSome.open();
 

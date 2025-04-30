@@ -24,7 +24,7 @@ export class AddCustomerPage {
   }
 
   async openCustomersListTab() {
-    await this.page.goto('/angularJs-protractor/BankingProject/#/manager/list')
+    await this.page.goto('/angularJs-protractor/BankingProject/#/manager/list');
   }
 
   async fillField(field, value){
@@ -32,7 +32,7 @@ export class AddCustomerPage {
   }
 
   async clickBtn(btn){
-    await btn.click()
+    await btn.click();
   }
 
   async reloadPage() {
